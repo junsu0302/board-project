@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
@@ -22,6 +23,7 @@ import java.util.Set;
         @Index(columnList = "createAt"),
         @Index(columnList = "createBy"),
 })
+@EntityListeners(AuditingEntityListener.class) // JPA Auditing 설정
 @Entity // Entity 임을 명시
 public class Article {
     // 기본 Filed
@@ -38,8 +40,8 @@ public class Article {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>(); // 양방향 바인딩
 
-    @CreatedDate @Column(nullable = false) private LocalDateTime createAt; // 생성일시
-    @CreatedBy @Column(nullable = false, length = 100) private String createBy; // 생성자 (100자)
+    @CreatedDate @Column(nullable = false) private LocalDateTime createdAt; // 생성일시
+    @CreatedBy @Column(nullable = false, length = 100) private String createdBy; // 생성자 (100자)
     @LastModifiedDate @Column(nullable = false) private LocalDateTime modifiedAt; // 수정일시
     @LastModifiedBy @Column(nullable = false, length = 100) private String modifiedBy; // 수정자 (100자)
 

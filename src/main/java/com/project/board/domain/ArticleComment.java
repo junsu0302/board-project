@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -19,6 +20,7 @@ import java.util.Objects;
         @Index(columnList = "createAt"),
         @Index(columnList = "createBy"),
 })
+@EntityListeners(AuditingEntityListener.class) // JPA Auditing 설정
 @Entity // Entity 임을 명시
 public class ArticleComment {
     // 기본 Filed
@@ -28,8 +30,8 @@ public class ArticleComment {
     @Setter @ManyToOne(optional = false) private Article article; // 게시글 (ID) (수정 가능)
     @Setter @Column(nullable = false, length = 10000) private String content; // 본문 (수정 가능, 10000자)
 
-    @CreatedDate @Column(nullable = false) private LocalDateTime createAt; // 생성일시
-    @CreatedBy @Column(nullable = false, length = 100) private String createBy; // 생성자 (100자)
+    @CreatedDate @Column(nullable = false) private LocalDateTime createdAt; // 생성일시
+    @CreatedBy @Column(nullable = false, length = 100) private String createdBy; // 생성자 (100자)
     @LastModifiedDate @Column(nullable = false) private LocalDateTime modifiedAt; // 수정일시
     @LastModifiedBy @Column(nullable = false, length = 100) private String modifiedBy; // 수정자 (100자)
 

@@ -23,9 +23,8 @@ import java.util.Set;
         @Index(columnList = "createAt"),
         @Index(columnList = "createBy"),
 })
-@EntityListeners(AuditingEntityListener.class) // JPA Auditing 설정
 @Entity // Entity 임을 명시
-public class Article {
+public class Article extends AuditingFields {
     // 기본 Filed
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) // PK 설정
     private Long id; // 아이디
@@ -39,11 +38,6 @@ public class Article {
     @OrderBy("id")
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>(); // 양방향 바인딩
-
-    @CreatedDate @Column(nullable = false) private LocalDateTime createdAt; // 생성일시
-    @CreatedBy @Column(nullable = false, length = 100) private String createdBy; // 생성자 (100자)
-    @LastModifiedDate @Column(nullable = false) private LocalDateTime modifiedAt; // 수정일시
-    @LastModifiedBy @Column(nullable = false, length = 100) private String modifiedBy; // 수정자 (100자)
 
     // 기능
     protected Article() {} // 기본 생성자

@@ -20,20 +20,14 @@ import java.util.Objects;
         @Index(columnList = "createAt"),
         @Index(columnList = "createBy"),
 })
-@EntityListeners(AuditingEntityListener.class) // JPA Auditing 설정
 @Entity // Entity 임을 명시
-public class ArticleComment {
+public class ArticleComment extends AuditingFields {
     // 기본 Filed
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) // PK 설정
     private Long id; // 아이디
 
     @Setter @ManyToOne(optional = false) private Article article; // 게시글 (ID) (수정 가능)
     @Setter @Column(nullable = false, length = 10000) private String content; // 본문 (수정 가능, 10000자)
-
-    @CreatedDate @Column(nullable = false) private LocalDateTime createdAt; // 생성일시
-    @CreatedBy @Column(nullable = false, length = 100) private String createdBy; // 생성자 (100자)
-    @LastModifiedDate @Column(nullable = false) private LocalDateTime modifiedAt; // 수정일시
-    @LastModifiedBy @Column(nullable = false, length = 100) private String modifiedBy; // 수정자 (100자)
 
     // 기능
     protected ArticleComment() {} // 기본 생성자

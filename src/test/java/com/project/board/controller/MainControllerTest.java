@@ -24,12 +24,11 @@ class MainControllerTest {
         this.mvc = mvc;
     }
 
-    // 테스트
+    // 테스트 정의
     @DisplayName("[view][GET] 루트 페이지 테스트")
     @Test
     void givenNothing_whenRequestingRootPage_thenRedirectsToArticlesPage() throws Exception {
         // Given
-
 
         // When & Then
         mvc.perform(get("/"))

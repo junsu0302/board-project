@@ -22,12 +22,13 @@ public class ArticleComment extends AuditingFields {
 
     @Setter @ManyToOne(optional = false) private UserAccount userAccount; // 유저 정보 (ID)
     @Setter @ManyToOne(optional = false) private Article article; // 게시글 (ID) (수정 가능)
+    @Setter @ManyToOne(optional = false) private UserAccount userAccount; // 유저 정보 (ID) (수정 가능)
     @Setter @Column(nullable = false, length = 10000) private String content; // 본문 (수정 가능, 10000자)
 
     // 기능
     protected ArticleComment() {} // 기본 생성자
 
-    private ArticleComment(Article article, UserAccount userAccount, String content) {
+    public ArticleComment(Article article, UserAccount userAccount, String content) {
         // 도메인 ArticleComment 생성할 때, 필요한 정보 세팅
         this.article = article;
         this.userAccount = userAccount;
@@ -35,6 +36,7 @@ public class ArticleComment extends AuditingFields {
     }
 
     public static ArticleComment of(Article article, UserAccount userAccount, String content) {
+        // 사용하기 편하게 세팅
         return new ArticleComment(article, userAccount, content);
     }
 

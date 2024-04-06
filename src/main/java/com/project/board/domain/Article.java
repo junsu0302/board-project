@@ -23,7 +23,7 @@ public class Article extends AuditingFields {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) // PK 설정
     private Long id; // 아이디
 
-    @Setter @ManyToOne(optional = false) private UserAccount userAccount; // 유저 정보 (ID)
+    @Setter @ManyToOne(optional = false) private UserAccount userAccount; // 유저 정보 (ID) (수정 가능)
     @Setter @Column(nullable = false) private String title; // 제목 (수정 가능)
     @Setter @Column(nullable = false, length = 10000) private String content; // 본문 (수정 가능, 10000자)
 
@@ -46,6 +46,7 @@ public class Article extends AuditingFields {
     }
 
     public static Article of(UserAccount userAccount, String title, String content, String hashtag) {
+        // 사용하기 편하게 세팅
         return new Article(userAccount, title, content, hashtag);
     }
 

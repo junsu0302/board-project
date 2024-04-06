@@ -1,26 +1,50 @@
 package com.project.board.dto;
 
-import java.io.Serializable;
+import com.project.board.domain.UserAccount;
+
 import java.time.LocalDateTime;
 
-/**
- * DTO for {@link com.project.board.domain.UserAccount}
- */
 public record UserAccountDto(
-        LocalDateTime createdAt,
-        String createdBy,
-        LocalDateTime modifiedAt,
-        String modifiedBy,
-
         Long id,
         String userId,
         String userPassword,
         String email,
         String nickname,
-
-        String memo
+        String memo,
+        LocalDateTime createdAt,
+        String createdBy,
+        LocalDateTime modifiedAt,
+        String modifiedBy
 ) {
-    public static UserAccountDto of(LocalDateTime createdAt, String createdBy, LocalDateTime modifiedAt, String modifiedBy, Long id, String userId, String userPassword, String email, String nickname, String memo) {
-        return new UserAccountDto(createdAt, createdBy, modifiedAt, modifiedBy, id, userId, userPassword, email, nickname, memo);
+    public static UserAccountDto of(Long id, String userId, String userPassword, String email, String nickname, String memo, LocalDateTime createdAt, String createdBy, LocalDateTime modifiedAt, String modifiedBy) {
+        return new UserAccountDto(id, userId, userPassword, email, nickname, memo, createdAt, createdBy, modifiedAt, modifiedBy);
     }
+
+    // Entity로부터 DTO 생성
+    public static UserAccountDto from(UserAccount entity) {
+        return new UserAccountDto(
+                entity.getId(),
+                entity.getUserId(),
+                entity.getUserPassword(),
+                entity.getEmail(),
+                entity.getNickname(),
+                entity.getMemo(),
+                entity.getCreatedAt(),
+                entity.getCreatedBy(),
+                entity.getModifiedAt(),
+                entity.getModifiedBy()
+        );
+    }
+
+    // DTO로부터 Entity 생성
+    public UserAccount toEntity() {
+        return UserAccount.of(
+                userId,
+                userPassword,
+                email,
+                nickname,
+                memo
+        );
+    }
+
 }

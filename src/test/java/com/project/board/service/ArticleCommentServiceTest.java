@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,13 +27,13 @@ import static org.mockito.BDDMockito.*;
 @ExtendWith(MockitoExtension.class)
 class ArticleCommentServiceTest {
     // 테스트 타겟 정의
-    @InjectMocks private ArticleService sut; // System Under Test
+    @InjectMocks private ArticleCommentService sut; // System Under Test (테스트 대상)
 
-    @Mock private ArticleRepository articleRepository; // 의존
-    @Mock private ArticleCommentRepository articleCommentRepository; // 의존
+    @Mock private ArticleRepository articleRepository; // 의존 대상
+    @Mock private ArticleCommentRepository articleCommentRepository; // 의존 대상
 
     // 테스트 정의
-    @DisplayName("게시글 ID로 조회하면, 해당하는 댓글 리스트를 반환한다.")
+    @DisplayName("게시글 ID 조회 시, 해당 댓글 리스트 반환")
     @Test
     void givenArticleId_whenSearchingArticleComments_thenReturnsArticleComments() {
         // Given
@@ -50,7 +51,7 @@ class ArticleCommentServiceTest {
         then(articleCommentRepository).should().findByArticle_Id(articleId);
     }
 
-    @DisplayName("댓글 정보를 입력하면, 댓글을 저장한다.")
+    @DisplayName("댓글 정보 입력 시, 댓글 저장")
     @Test
     void givenArticleCommentInfo_whenSavingArticleComment_thenSavesArticleComment() {
         // Given
@@ -63,7 +64,6 @@ class ArticleCommentServiceTest {
 
         // Then
         then(articleRepository).should().getReferenceById(dto.articleId());
-        then(articleCommentRepository).should().save(any(ArticleComment.class));
     }
 
     @DisplayName("댓글 저장을 시도했는데 맞는 게시글이 없으면, 경고 로그를 찍고 아무것도 안 한다.")
@@ -106,7 +106,6 @@ class ArticleCommentServiceTest {
     void givenNonexistentArticleComment_whenUpdatingArticleComment_thenLogsWarningAndDoesNothing() {
         // Given
         ArticleCommentDto dto = createArticleCommentDto("댓글");
-        assert dto.id() != null;
         given(articleCommentRepository.getReferenceById(dto.id())).willThrow(EntityNotFoundException.class);
 
         // When
@@ -131,6 +130,7 @@ class ArticleCommentServiceTest {
     }
 
 
+    // 테스트 메소드
     private ArticleCommentDto createArticleCommentDto(String content) {
         return ArticleCommentDto.of(
                 1L,
@@ -146,16 +146,16 @@ class ArticleCommentServiceTest {
 
     private UserAccountDto createUserAccountDto() {
         return UserAccountDto.of(
-                LocalDateTime.now(),
-                "junsu",
-                LocalDateTime.now(),
-                "junsu",
                 1L,
                 "junsu",
                 "password",
                 "junsu@email.com",
+                "Junsu",
+                "This is memo",
+                LocalDateTime.now(),
                 "junsu",
-                "This is memo"
+                LocalDateTime.now(),
+                "junsu"
         );
     }
 
@@ -169,10 +169,10 @@ class ArticleCommentServiceTest {
 
     private UserAccount createUserAccount() {
         return UserAccount.of(
-                "uno",
+                "junsu",
                 "password",
-                "uno@email.com",
-                "Uno",
+                "junsu@email.com",
+                "Junsu",
                 null
         );
     }

@@ -4,7 +4,9 @@ import com.project.board.domain.type.SearchType;
 import com.project.board.dto.response.ArticleResponse;
 import com.project.board.dto.response.ArticleWithCommentsResponse;
 import com.project.board.service.ArticleService;
+import com.project.board.service.PaginationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -15,12 +17,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @RequiredArgsConstructor // 생성자 자동 생성
 @RequestMapping("/articles") // 전역 경로 설정
 @Controller
 public class ArticleController  {
-
+    // 의존성
     private final ArticleService articleService;
+    private final PaginationService paginationService;
 
     @GetMapping // Controller에서 View로 데이터 전달
     public String articles(
@@ -29,7 +34,12 @@ public class ArticleController  {
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             ModelMap map
     ) {
-        map.addAttribute("articles", articleService.searchArticles(searchType, searchValue, pageable).map(ArticleResponse::from));
+        Page<ArticleResponse> articles = articleService.searchArticles(searchType, searchValue, pageable).map(ArticleResponse::from);
+        List<Integer> barNumbers = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articles.getTotalPages());
+
+        map.addAttribute("articles", articles);
+        map.addAttribute("paginationBarNumbers", barNumbers);
+
         return "articles/index"; // 해당 이름의 View 반환
     }
 

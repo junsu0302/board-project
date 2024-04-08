@@ -33,5 +33,4 @@ public interface ArticleCommentRepository extends
         bindings.bind(root.createdBy).first(StringExpression::containsIgnoreCase);
     }
 
-    Object findByArticle_Id(Long articleId);
 }

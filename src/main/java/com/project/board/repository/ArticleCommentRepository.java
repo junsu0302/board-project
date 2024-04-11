@@ -18,7 +18,7 @@ public interface ArticleCommentRepository extends
         QuerydslPredicateExecutor<ArticleComment>, // 모든 Entity에 대한 검색 기능 제공
         QuerydslBinderCustomizer<QArticleComment> // 커스텀 검색 기능 구현 기능 제공
 {
-    // 메소드
+    // 쿼리 메소드
     List<ArticleComment> findByArticle_Id(Long articleId);
 
     @Override

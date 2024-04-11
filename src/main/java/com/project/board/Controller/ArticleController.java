@@ -39,6 +39,7 @@ public class ArticleController  {
 
         map.addAttribute("articles", articles);
         map.addAttribute("paginationBarNumbers", barNumbers);
+        map.addAttribute("searchTypes", SearchType.values());
 
         return "articles/index"; // 해당 이름의 View 반환
     }

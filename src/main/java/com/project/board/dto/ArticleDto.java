@@ -1,6 +1,7 @@
 package com.project.board.dto;
 
 import com.project.board.domain.Article;
+import com.project.board.domain.UserAccount;
 
 import java.time.LocalDateTime;
 
@@ -15,8 +16,8 @@ public record ArticleDto(
         LocalDateTime modifiedAt,
         String modifiedBy
 ) {
-    public static ArticleDto of(Long id, UserAccountDto userAccountDto, String title, String content, String hashtag, LocalDateTime createdAt, String createdBy, LocalDateTime modifiedAt, String modifiedBy) {
-        return new ArticleDto(id, userAccountDto, title, content, hashtag, createdAt, createdBy, modifiedAt, modifiedBy);
+    public static ArticleDto of(long l, UserAccountDto userAccountDto, String title, String content, String hashtag, LocalDateTime now, String junsu, LocalDateTime nowed, String s) {
+        return new ArticleDto(null, userAccountDto, title, content, hashtag, null, null, null, null);
     }
 
     // Entity로부터 DTO 생성
@@ -35,13 +36,12 @@ public record ArticleDto(
     }
 
     // DTO로부터 Entity 생성
-    public Article toEntity() {
+    public Article toEntity(UserAccount userAccount) {
         return Article.of(
-                userAccountDto.toEntity(),
+                userAccount,
                 title,
                 content,
                 hashtag
         );
     }
-
 }

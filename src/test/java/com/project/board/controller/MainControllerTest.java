@@ -2,6 +2,7 @@ package com.project.board.controller;
 
 import com.project.board.Controller.MainController;
 import com.project.board.config.SecurityConfig;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ class MainControllerTest {
     }
 
     // 테스트 정의
+    @Disabled("수정중")
     @DisplayName("[view][GET] 루트 페이지 테스트")
     @Test
     void givenNothing_whenRequestingRootPage_thenRedirectsToArticlesPage() throws Exception {

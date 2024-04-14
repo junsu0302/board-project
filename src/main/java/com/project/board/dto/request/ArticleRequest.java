@@ -1,4 +1,4 @@
-package com.project.board.request;
+package com.project.board.dto.request;
 
 import com.project.board.dto.ArticleDto;
 import com.project.board.dto.UserAccountDto;
@@ -21,7 +21,7 @@ public record ArticleRequest(
                 title,
                 content,
                 hashtag,
-                LocalDateTime.now(), "Uno", LocalDateTime.now(), "Uno");
+                LocalDateTime.now(), "junsu", LocalDateTime.now(), "junsu");
     }
 
 }

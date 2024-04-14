@@ -7,6 +7,7 @@ import com.project.board.dto.ArticleCommentDto;
 import com.project.board.dto.UserAccountDto;
 import com.project.board.repository.ArticleCommentRepository;
 import com.project.board.repository.ArticleRepository;
+import com.project.board.repository.UserAccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,9 +32,10 @@ class ArticleCommentServiceTest {
 
     @Mock private ArticleRepository articleRepository; // 의존 대상
     @Mock private ArticleCommentRepository articleCommentRepository; // 의존 대상
+    @Mock private UserAccountRepository userAccountRepository;
 
     // 테스트 정의
-    @DisplayName("게시글 ID 조회 시, 해당 댓글 리스트 반환")
+    @DisplayName("게시글 ID로 조회하면, 해당하는 댓글 리스트를 반환한다.")
     @Test
     void givenArticleId_whenSearchingArticleComments_thenReturnsArticleComments() {
         // Given
@@ -51,12 +53,13 @@ class ArticleCommentServiceTest {
         then(articleCommentRepository).should().findByArticle_Id(articleId);
     }
 
-    @DisplayName("댓글 정보 입력 시, 댓글 저장")
+    @DisplayName("댓글 정보를 입력하면, 댓글을 저장한다.")
     @Test
     void givenArticleCommentInfo_whenSavingArticleComment_thenSavesArticleComment() {
         // Given
         ArticleCommentDto dto = createArticleCommentDto("댓글");
         given(articleRepository.getReferenceById(dto.articleId())).willReturn(createArticle());
+        given(userAccountRepository.getReferenceById(dto.userAccountDto().userId())).willReturn(createUserAccount());
         given(articleCommentRepository.save(any(ArticleComment.class))).willReturn(null);
 
         // When
@@ -64,6 +67,8 @@ class ArticleCommentServiceTest {
 
         // Then
         then(articleRepository).should().getReferenceById(dto.articleId());
+        then(userAccountRepository).should().getReferenceById(dto.userAccountDto().userId());
+        then(articleCommentRepository).should().save(any(ArticleComment.class));
     }
 
     @DisplayName("댓글 저장을 시도했는데 맞는 게시글이 없으면, 경고 로그를 찍고 아무것도 안 한다.")
@@ -78,6 +83,7 @@ class ArticleCommentServiceTest {
 
         // Then
         then(articleRepository).should().getReferenceById(dto.articleId());
+        then(userAccountRepository).shouldHaveNoInteractions();
         then(articleCommentRepository).shouldHaveNoInteractions();
     }
 
@@ -130,7 +136,6 @@ class ArticleCommentServiceTest {
     }
 
 
-    // 테스트 메소드
     private ArticleCommentDto createArticleCommentDto(String content) {
         return ArticleCommentDto.of(
                 1L,
@@ -148,8 +153,8 @@ class ArticleCommentServiceTest {
         return UserAccountDto.of(
                 "junsu",
                 "password",
-                "junsu@email.com",
-                "Junsu",
+                "junsu@mail.com",
+                "junsu",
                 "This is memo",
                 LocalDateTime.now(),
                 "junsu",
@@ -171,7 +176,7 @@ class ArticleCommentServiceTest {
                 "junsu",
                 "password",
                 "junsu@email.com",
-                "Junsu",
+                "junsu",
                 null
         );
     }

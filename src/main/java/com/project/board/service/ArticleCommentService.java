@@ -1,9 +1,12 @@
 package com.project.board.service;
 
+import com.project.board.domain.Article;
 import com.project.board.domain.ArticleComment;
+import com.project.board.domain.UserAccount;
 import com.project.board.dto.ArticleCommentDto;
 import com.project.board.repository.ArticleCommentRepository;
 import com.project.board.repository.ArticleRepository;
+import com.project.board.repository.UserAccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +20,7 @@ import java.util.List;
 @Transactional
 @Service
 public class ArticleCommentService {
+    private final UserAccountRepository userAccountRepository;
     private final ArticleRepository articleRepository;
     private final ArticleCommentRepository articleCommentRepository;
 
@@ -32,22 +36,20 @@ public class ArticleCommentService {
     // 서비스 메소드
     public void saveArticleComment(ArticleCommentDto dto) {
         try {
-            articleCommentRepository.save(
-                    dto.toEntity(articleRepository.getReferenceById(dto.articleId()))
-            );
+            Article article = articleRepository.getReferenceById(dto.articleId());
+            UserAccount userAccount = userAccountRepository.getReferenceById(dto.userAccountDto().userId());
+            articleCommentRepository.save(dto.toEntity(article, userAccount));
         } catch (EntityNotFoundException e) {
-            log.warn("댓글 저장 실패. 댓글의 게시글을 찾을 수 없습니다 - dto: {}", dto);
+            log.warn("댓글 저장 실패. 댓글 작성에 필요한 정보를 찾을 수 없습니다 - {}", e.getLocalizedMessage());
         }
     }
 
     public void updateArticleComment(ArticleCommentDto dto) {
         try {
             ArticleComment articleComment = articleCommentRepository.getReferenceById(dto.id());
-            if (dto.content() != null) {
-                articleComment.setContent(dto.content());
-            }
+            if (dto.content() != null) { articleComment.setContent(dto.content()); }
         } catch (EntityNotFoundException e) {
-            log.warn("댓글 업데이트 실패, 댓글을 찾을 수 없습니다 - dto: {}", dto);
+            log.warn("댓글 업데이트 실패. 댓글을 찾을 수 없습니다 - dto: {}", dto);
         }
     }
 

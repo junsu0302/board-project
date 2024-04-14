@@ -16,7 +16,7 @@ public record ArticleDto(
         LocalDateTime modifiedAt,
         String modifiedBy
 ) {
-    public static ArticleDto of(long l, UserAccountDto userAccountDto, String title, String content, String hashtag, LocalDateTime now, String uno, LocalDateTime nowed, String s) {
+    public static ArticleDto of(long l, UserAccountDto userAccountDto, String title, String content, String hashtag, LocalDateTime now, String junsu, LocalDateTime nowed, String s) {
         return new ArticleDto(null, userAccountDto, title, content, hashtag, null, null, null, null);
     }
 

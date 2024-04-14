@@ -8,7 +8,7 @@ import com.project.board.dto.ArticleDto;
 import com.project.board.dto.ArticleWithCommentsDto;
 import com.project.board.dto.UserAccountDto;
 import com.project.board.dto.response.ArticleResponse;
-import com.project.board.request.ArticleRequest;
+import com.project.board.dto.request.ArticleRequest;
 import com.project.board.service.ArticleService;
 import com.project.board.service.PaginationService;
 import com.project.board.utils.FormDataEncoder;
@@ -311,7 +311,7 @@ class ArticleControllerTest {
                 "title",
                 "content",
                 "#java",
-                LocalDateTime.now(), "Uno", LocalDateTime.now(), "Uno");
+                LocalDateTime.now(), "junsu", LocalDateTime.now(), "junsu");
     }
 
     private ArticleWithCommentsDto createArticleWithCommentsDto() {
